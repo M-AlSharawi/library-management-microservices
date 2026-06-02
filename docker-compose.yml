@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  catalog-service:
+    build: ./catalog-service
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_PROFILES_ACTIVE=default
+    networks:
+      - library-network
+
+  member-service:
+    build: ./member-service
+    ports:
+      - "8082:8082"
+    environment:
+      - SPRING_PROFILES_ACTIVE=default
+    networks:
+      - library-network
+
+  circulation-service:
+    build: ./circulation-service
+    ports:
+      - "8083:8083"
+    depends_on:
+      - catalog-service
+      - member-service
+    networks:
+      - library-network
+
+networks:
+  library-network:
+    driver: bridge
